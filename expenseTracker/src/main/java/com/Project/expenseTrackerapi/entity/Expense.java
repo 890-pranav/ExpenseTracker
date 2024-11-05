@@ -2,8 +2,12 @@ package com.Project.expenseTrackerapi.entity;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.*;
 
@@ -14,10 +18,34 @@ import lombok.*;
 @Entity
 @Table(name = "tbl_expense")
 public class Expense {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "expense_name")
+	private String name;
+	private String description;
+	
+	@Column(name = "expense_amount")
+	private BigDecimal amount;
+	
+	private String category;
+	private Date date;
+	
+	@Column(name = "created_at" , nullable = false , updatable = false)
+	@CreationTimestamp
+	private Timestamp createdAt;
+	
+	@Column(name = "updated_at")
+	@UpdateTimestamp
+	private Timestamp updatedAt;
+	
 	public Expense() {
 		super();
 	}
-	public Expense(Long id, String name, String description, BigDecimal amount, String category, Date date) {
+	public Expense(Long id, String name, String description, BigDecimal amount, String category, Date date,
+			Timestamp createdAt, Timestamp updatedAt) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -25,6 +53,20 @@ public class Expense {
 		this.amount = amount;
 		this.category = category;
 		this.date = date;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	public Long getId() {
 		return id;
@@ -62,17 +104,4 @@ public class Expense {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(name = "expense_name")
-	private String name;
-	private String description;
-	
-	@Column(name = "expense_amount")
-	private BigDecimal amount;
-	
-	private String category;
-	private Date date;
 }
