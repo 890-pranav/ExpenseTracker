@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,13 +27,20 @@ public class Expense {
 	private Long id;
 	
 	@Column(name = "expense_name")
+	@NotNull(message = "Expense name must not be null")
+	@NotBlank(message = "Expense cannot be blank")
+	@Size(min =3, message = "Expense name must be atleast 3 char")
 	private String name;
 	private String description;
 	
 	@Column(name = "expense_amount")
+	@NotNull(message = "Amount of an expense cannot be null")
 	private BigDecimal amount;
 	
+	@NotBlank(message = "Category of an expense cannot be blank")
 	private String category;
+	
+	@NotNull(message = "Date of an expense cannot be blank")
 	private Date date;
 	
 	@Column(name = "created_at" , nullable = false , updatable = false)
