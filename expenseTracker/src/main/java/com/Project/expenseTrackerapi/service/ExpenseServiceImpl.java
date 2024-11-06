@@ -1,10 +1,13 @@
 package com.Project.expenseTrackerapi.service;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.Project.expenseTrackerapi.entity.Expense;
+import com.Project.expenseTrackerapi.exceptions.ResourceNotFoundException;
 import com.Project.expenseTrackerapi.repository.ExpenseRepository;
 
 @Service
@@ -13,8 +16,8 @@ public class ExpenseServiceImpl implements ExpenseService {
 	@Autowired
 	private ExpenseRepository expenseRepo;
 	@Override
-	public List<Expense> getAllExpenses() {
-		return expenseRepo.findAll();
+	public Page<Expense> getAllExpenses(Pageable page) {
+		return expenseRepo.findAll(page);
 	}
 	@Override
 	public Expense getExpenseById(Long id) {
@@ -22,7 +25,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 		if(expense.isPresent()) {
 			return expense.get();
 		}
-		throw new RuntimeException("Expense not present for the Id "+id);
+		throw new ResourceNotFoundException("Expense not present for the Id "+id);
 	}
 	@Override
 	public void deleteExpenseById(Long id) {
